@@ -1,10 +1,12 @@
-#Mocks y Testing de Web API
+#Mocking y Testing de Web API
 
 Vamos a estudiar cómo podemos probar nuestro código evitando probar también sus dependencias, asegurándonos que los errores se restringen únicamente a la sección de código que efectivamente queremos probar. Para ello, utilizaremos una herramienta que nos permitirá crear Mocks. La herramienta será [Moq](https://github.com/moq/moq4).
 
 ##¿Qué son los Mocks?
 
-Existen dos objetos que nos permiten probar sistemas. Nos referiremos a la sección del sistema a probar como SUT (System under test). Los Mocks, nos permiten verificar la interacción del SUT con sus dependencias. Los Stubs, nos permiten verificar el estado de los objetos que se pasan. Como queremos testear el comportamiento de nuestro código, utilizaremos los primeros. 
+Existen dos objetos que nos permiten probar sistemas (nos referiremos a la sección del sistema a probar como SUT -System under test-). Los Mocks, nos permiten verificar la interacción del SUT con sus dependencias. Los Stubs, nos permiten verificar el estado de los objetos que se pasan. Como queremos testear el comportamiento de nuestro código, utilizaremos los primeros. 
+
+La idea entonces es crear instancias de Mocks, es decir, objetos que simulen el comportamiento externo (es decir, la interfaz), de un cierto objeto. Son objetos tontos, que no dependen de nadie, siendo útiles para aislar una cierta parte de la aplicación que queramos probar. En este caso, utilizaremos el proyecto de Servicios, el cual contiene la lógica fundamental de la Web Api.
 
 ##Empezando con Moq.
 
