@@ -20,7 +20,7 @@ Una vez que estos pasos estén prontos, podemos comenzar a realizar nuestro prim
 
 ```C#
 
-[TestMethod]
+[Fact]
 public void CreateUserTest()
 {
     //Arrange
@@ -39,7 +39,7 @@ Ahora, podemos comenzar a probar. Nuestros servicios interactúan con la clase U
 
 ```C#
 
-[TestMethod]
+[Fact]
 public void CreateUserTest()
 {
     //Arrange
@@ -63,7 +63,7 @@ Sin embargo, nos falta definir el comportamiento que debe tener el mock del unit
 
 ```C#
 
-[TestMethod]
+[Fact]
 public void CreateUserTest()
 {
     //Arrange
@@ -92,7 +92,7 @@ Una vez que ejecutamos el método que queremos probar, también debemos verifica
 
 ```C#
 
-[TestMethod]
+[Fact]
 public void CreateUserTest()
 {
     //Arrange
@@ -126,7 +126,7 @@ Para ello, probemos el método de updateUser
 
 ```C#
 
-[TestMethod]
+[Fact]
 public void UpdateExistingUser()
 {
     //Arrange 
@@ -152,7 +152,7 @@ Una vez que seteamos el retorno esperado, debemos ejecutar el update con un usua
 
 ```C#
 
-[TestMethod]
+[Fact]
 public void UpdateExistingUser()
 {
     //Arrange 
