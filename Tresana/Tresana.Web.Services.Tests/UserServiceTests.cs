@@ -11,14 +11,12 @@ namespace Tresana.Web.Services.Tests
 {
     public class UserServiceTests
     {
-
         [Fact]
         public void GetAllUsersFromRepositoryTest()
         {
             //Arrange
             var mockUnitOfWork = new Mock<IUnitOfWork>();
 
-            
             mockUnitOfWork.Setup(un => un.UserRepository.Get(null, null, ""));
 
             IUserService userService = new UserService(mockUnitOfWork.Object);
@@ -58,11 +56,9 @@ namespace Tresana.Web.Services.Tests
             mockUnitOfWork.Setup(un => un.Save());
 
             IUserService userService = new UserService(mockUnitOfWork.Object);
-            
 
             //Act
            int id = userService.CreateUser(new User());
-
 
             //Assert
             mockUnitOfWork.VerifyAll();
@@ -95,7 +91,6 @@ namespace Tresana.Web.Services.Tests
             mockUnitOfWork.Verify(un=> un.UserRepository.Update(It.IsAny<User>()), Times.Exactly(1));
             mockUnitOfWork.Verify(un=> un.Save(), Times.Exactly(1));
             Assert.True(updated);
-
         }
 
         [Fact]
@@ -123,43 +118,7 @@ namespace Tresana.Web.Services.Tests
             mockUnitOfWork.Verify(un => un.UserRepository.Update(It.IsAny<User>()), Times.Never());
             mockUnitOfWork.Verify(un => un.Save(), Times.Never());
             Assert.False(updated);
-
         }
 
-
-        private IEnumerable<User> GetUserList()
-        {
-            return new[]
-            {
-                new User()
-                {
-                    Name = "Alejandro",
-                    LastName = "Tocar",
-                    UserName = "aletocar",
-                    Mail = "aletocar@gmail.com",
-                    Id = 1
-                },
-                new User()
-                {
-                    Name = "Nicolas",
-                    LastName = "Fornaro",
-                    UserName = "nfornaro",
-                    Mail = "nfornaro@gmail.com",
-                    Id = 2
-                }
-            };
-        }
-        private User GetUserById(int id)
-        {
-            return
-                new User()
-                {
-                    Name = "Alejandro",
-                    LastName = "Tocar",
-                    UserName = "aletocar",
-                    Mail = "aletocar@gmail.com",
-                    Id = id
-                };
-        }
     }
 }

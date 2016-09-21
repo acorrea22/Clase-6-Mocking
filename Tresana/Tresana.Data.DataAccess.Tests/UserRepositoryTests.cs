@@ -37,18 +37,18 @@ namespace Tresana.Data.Repository.Tests
             {
                 new User()
                 {
-                    Name = "Alejandro",
-                    LastName = "Tocar",
-                    UserName = "aletocar",
-                    Mail = "aletocar@gmail.com",
+                    Name = "Gabriel",
+                    LastName = "Piffaretti",
+                    UserName = "piffarettig",
+                    Mail = "piffarettig@gmail.com",
                     Id = 1
                 },
                 new User()
                 {
-                    Name = "Nicolas",
-                    LastName = "Fornaro",
-                    UserName = "nfornaro",
-                    Mail = "nfornaro@gmail.com",
+                    Name = "ignacio",
+                    LastName = "valle",
+                    UserName = "ivalle",
+                    Mail = "ignaciovalle@gmail.com",
                     Id = 2
                 }
             };
