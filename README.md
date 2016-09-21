@@ -12,15 +12,15 @@ Antes de hacer énfasis en tal diferencia, es importante aclarar que nos referir
 
 Porque queremos probar objetos y la forma en que estos interactúan con otros objetos. Para ello crearemos instancias de Mocks, es decir, objetos que simulen el comportamiento externo (es decir, la interfaz), de un cierto objeto. Son objetos tontos, que no dependen de nadie, siendo útiles para aislar una cierta parte de la aplicación que queramos probar. En este caso, utilizaremos el proyecto de Servicios, el cual contiene la lógica fundamental de la Web Api.
 
-##Empezando con Moq.
+##Empezando con Moq
 
-Para comenzar a utilizar Moq, comenzaremos probando nuestro paquete de servicios. Para ello, debemos crear un nuevo proyecto de tipo Librería de Clases (Tresana.Web.Services.Tests) e instalarle Moq y XUnit, utilizando el manejador de paquetes Nuget. Se deberán agregar también las referencias al proyecto de nuestras entidades, al de los servicios, y al de los repositorios.
+Para comenzar a utilizar Moq, comenzaremos probando nuestro paquete de servicios. Para ello, debemos crear un nuevo proyecto de tipo Librería de Clases (Tresana.Web.Services.Tests) e instalarle Moq, utilizando el manejador de paquetes Nuget. Se deberán agregar también las referencias al proyecto de nuestras entidades, al de los servicios, y al de los repositorios.
 
 Una vez que estos pasos estén prontos, podemos comenzar a realizar nuestro primer test. Creamos entonces la clase UserServiceTests, y en ella escribimos el primer `Fact`. 
 
 ```C#
 
-[Fact]
+[TestMethod]
 public void CreateUserTest()
 {
     //Arrange
@@ -39,7 +39,7 @@ Ahora, podemos comenzar a probar. Nuestros servicios interactúan con la clase U
 
 ```C#
 
-[Fact]
+[TestMethod]
 public void CreateUserTest()
 {
     //Arrange
@@ -63,7 +63,7 @@ Sin embargo, nos falta definir el comportamiento que debe tener el mock del unit
 
 ```C#
 
-[Fact]
+[TestMethod]
 public void CreateUserTest()
 {
     //Arrange
@@ -92,7 +92,7 @@ Una vez que ejecutamos el método que queremos probar, también debemos verifica
 
 ```C#
 
-[Fact]
+[TestMethod]
 public void CreateUserTest()
 {
     //Arrange
@@ -126,7 +126,7 @@ Para ello, probemos el método de updateUser
 
 ```C#
 
-[Fact]
+[TestMethod]
 public void UpdateExistingUser()
 {
     //Arrange 
@@ -152,7 +152,7 @@ Una vez que seteamos el retorno esperado, debemos ejecutar el update con un usua
 
 ```C#
 
-[Fact]
+[TestMethod]
 public void UpdateExistingUser()
 {
     //Arrange 
