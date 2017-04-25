@@ -10,13 +10,13 @@ Antes de hacer énfasis en tal diferencia, es importante aclarar que nos referir
 
 ## ¿Por qué los queremos usar?
 
-Porque queremos probar objetos y la forma en que estos interactúan con otros objetos. Para ello crearemos instancias de Mocks, es decir, objetos que simulen el comportamiento externo (es decir, la interfaz), de un cierto objeto. Son objetos tontos, que no dependen de nadie, siendo útiles para aislar una cierta parte de la aplicación que queramos probar. En este caso, utilizaremos el proyecto de Servicios, el cual contiene la lógica fundamental de la Web Api.
+Porque queremos probar objetos y la forma en que estos interactúan con otros objetos. Para ello crearemos instancias de Mocks, es decir, objetos que simulen el comportamiento externo (es decir, la interfaz), de un cierto objeto. Son objetos tontos, que no dependen de nadie, siendo útiles para aislar una cierta parte de la aplicación que queramos probar. En este caso, utilizaremos el proyecto de **BusinessLogic (o lógica de negocio)** , el cual contiene la lógica fundamental de la Web Api.
 
 ## Empezando con Moq
 
 Para comenzar a utilizar Moq, comenzaremos probando nuestro paquete de servicios. Para ello, debemos crear un nuevo proyecto de tipo Librería de Clases (Tresana.Web.Services.Tests) e instalarle Moq, utilizando el manejador de paquetes Nuget. Se deberán agregar también las referencias al proyecto de nuestras entidades, al de los servicios, y al de los repositorios.
 
-Una vez que estos pasos estén prontos, podemos comenzar a realizar nuestro primer test. Creamos entonces la clase UserServiceTests, y en ella escribimos el primer `Fact`. 
+Una vez que estos pasos estén prontos, podemos comenzar a realizar nuestro primer test. Creamos entonces la clase BreedsBusinessLogicTest, y en ella escribimos el primer `Fact`. 
 
 ```C#
 
