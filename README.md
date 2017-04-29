@@ -18,6 +18,9 @@ Hay ciertos casos en los que incluso los mocks son realmente la forma más adecu
 
 En consecuencia, generamos un **bajo acoplamiento** entre una clase y sus dependencias, lo cual nos facilita utilizar un framework de mocking. Especialmente para aquellos objetos que dependen de un recurso externo (una red, un archivo o una base de datos).
 
+![alt text](https://s-media-cache-ak0.pinimg.com/originals/e8/11/e4/e811e4d1f27b6f70006307ae7dce38d8.gif)
+
+
 Particularmente estaremos mostrando cómo hacer pruebas unitarias sobre los controllers de nuestra Web Api, realizando mocks sobre las definiciones de nuestra lógica de negocio, por ejemplo: IBreedsBusinessLogic.
 
 ## Empezando con Moq
