@@ -74,7 +74,6 @@ public void GetAllBreedsOkTest()
     //Assert
 
 }
-
 ```
 
 Sin embargo, nos falta definir el comportamiento que debe tener el mock del nuestro IBreedsBusinessLogic. Esto es lo que llamamos **expectativas** y lo que vamos asegurarnos que se cumpla al final de la prueba. Recordemos, los mocks simulan el comportamiento de nuestros objetos, siendo ese comportamiento lo que vamos a especificar a partir de expectativas. Para ello, usamos el método **Setup**.
@@ -103,7 +102,8 @@ public IHttpActionResult Get()
 }
 ```
 
-La línea que queremos mockear es la de 
+La línea que queremos mockear es la de:
+
 ```C#
 IEnumerable<Breed> breeds = breedsBusinessLogic.GetAllBreeds();
 ``` 
@@ -183,6 +183,7 @@ public void GetAllBreedsOkTest()
 
     //Act
     IHttpActionResult obtainedResult = controller.Get();
+    // Casteo el resultado HTTP a un resultado OK
     var contentResult = obtainedResult as OkNegotiatedContentResult<IEnumerable<Breed>>;
 
     //Assert
@@ -194,69 +195,37 @@ public void GetAllBreedsOkTest()
 
 ```
 
-Y voilá. Si corremos, obtenemos que el test ha pasado. Sin embargo, el método CreateUser() retorna un int.
-Más adelante veremos como verificar esto.
+Y voilá. Vemos que nuestro test pasa 😎!
 
-Veamos ahora como controlar los valores de retorno de los mocks en nuestros métodos. 
-Para ello, probemos el método de updateUser
+Ahora veamos como probar otros casos particulares, por ejemplo cuando nuestro ```Get()``` del Controller nos devuelve una **BadRequest**.
 
-```C#
-
-[Fact]
-public void UpdateExistingUser()
-{
-    //Arrange 
-    var mockUnitOfWork = new Mock<IUnitOfWork>();
-    //Para el Update, se utiliza el método ExistsUser(), el cual a su vez utiliza el método GetUserByID del repositorio.
-    //En este test, querémos asegurarnos que, en caso que el usuario exista, se ejecute el Update() y el Save() en el repositorio.
-    //Por lo tanto, debemos establecer que el GetUserByID devuelva algo distinto de null, de manera que el ExistsUser retorne true.
-    mockUnitOfWork
-        .Setup(un => un.UserRepository.GetByID(It.IsAny<int>()))
-        .Returns(new User() { });
-
-    //Además, seteamos las expectativas para los métodos que deben llamarse luego
-    mockUnitOfWork.Setup(un => un.UserRepository.Update(It.IsAny<User>()));
-    mockUnitOfWork.Setup(un => un.Save());
-    
-    IUserService userService = new UserService(mockUnitOfWork);
-    
-}
-
-```
-
-Una vez que seteamos el retorno esperado, debemos ejecutar el update con un usuario cualquiera y verificar que se realizaron los llamados correspondientes.
+Particularmente, en el caso que hemos visto antes nuestro Controller retornaba OK para dicho. Ahora, nos interesa probar el caso en el que nuestro Controller retorna una BadRequest. Particularmente esto se da cuando el método ```GetAllBreeds()``` retorna null. Seteamos entonces dichas expectativas y probemos.
 
 ```C#
-
-[Fact]
-public void UpdateExistingUser()
+ [TestMethod]
+public void GetAllBreedsErrorNotFoundTest()
 {
-    //Arrange 
-    var mockUnitOfWork = new Mock<IUnitOfWork>();
-    //Para el Update, se utiliza el método ExistsUser(), el cual a su vez utiliza el método GetUserByID del repositorio.
-    //En este test, querémos asegurarnos que, en caso que el usuario exista, se ejecute el Update() y el Save() en el repositorio.
-    //Por lo tanto, debemos establecer que el GetUserByID devuelva algo distinto de null, de manera que el ExistsUser retorne true.
-    mockUnitOfWork
-        .Setup(un => un.UserRepository.GetByID(It.IsAny<int>()))
-        .Returns(new User() { });
+    //Arrange
+    List<Breed> expectedBreeds = null;
 
-    //Además, seteamos las expectativas para los métodos que deben llamarse luego
-    mockUnitOfWork.Setup(un => un.UserRepository.Update(It.IsAny<User>()));
-    mockUnitOfWork.Setup(un => un.Save());
-    
-    IUserService userService = new UserService(mockUnitOfWork.Object);
+    var mockBreedsBusinessLogic = new Mock<IBreedsBusinessLogic>();
+    mockBreedsBusinessLogic
+        .Setup(bl => bl.GetAllBreeds())
+        .Returns(expectedBreeds);
 
-    //act
-    bool updated = userService.UpdateUser(0, new User() {});
+    var controller = new BreedsController(mockBreedsBusinessLogic.Object);
+
+    //Act
+    IHttpActionResult obtainedResult = controller.Get();
 
     //Assert
-    //En este caso, debemos asegurarnos que el Update y el Save se hayan llamado una vez.
-    mockUnitOfWork.Verify(un=> un.UserRepository.Update(It.IsAny<User>()), Times.Exactly(1));
-    mockUnitOfWork.Verify(un=> un.Save(), Times.Exactly(1));
-    
-    //Además, verificamos que retorne true, ya que el update fue realizado.
-    Assert.True(updated);
-    
+    mockBreedsBusinessLogic.VerifyAll();
+    Assert.IsInstanceOfType(obtainedResult, typeof(NotFoundResult));
 }
 
 ```
+
+Lo que hicimos fue indicar que el retorno esperado será ```null```. En consecuencia, nuestro controller al llamar a este mock, recibirá una lista de razas ```null```. Esto har que nuestro ```Get()``` sobre el Controller retorne una BadRequest.
+
+Finalmente entonces, verificamos que las expectativas se hayan cumplido (con el ```VerifyAll()```), y luego que el resultado obtenido sea un ```NotFoundResult```
+
