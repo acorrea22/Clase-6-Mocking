@@ -337,6 +337,16 @@ private void ConfigureHttpRequest(BreedsController controller)
 
 Es interesante ver cómo usamos ```It.IsAny<T>()``` lo cual le indica al mock que está recibiendo un parámetro que sea cualquier cosa, pero del tipo T.
 
+## Mockeando Headers
+
+Seguramente para llevar a cabo autenticación en su Web Api les interese obtener los headers en los mensajes HTTP.
+
+<http://stackoverflow.com/questions/21404734/how-to-add-and-get-header-values-in-webapi>
+
+Mockeando los headers:
+
+<http://stackoverflow.com/questions/9263457/how-do-i-make-a-unit-test-to-test-a-method-that-checks-request-headers>
+
 ## Documentacion de Moq
 
 Aquí vimos un montón de formas de usar mocks y de funciones que tiene el framework, sin embargo hay muchísimas más. Para leer sobre las mismas, ver la documentación.
