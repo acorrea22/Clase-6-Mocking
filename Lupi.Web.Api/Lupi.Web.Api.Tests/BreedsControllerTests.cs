@@ -234,7 +234,8 @@ namespace Lupi.Web.Api.Tests
         public void DeleteBreedOkTest()
         {
             //Arrange
-            var fakeBreed = GetAFakeBreed();
+
+            Guid fakeGuid = Guid.NewGuid();
 
             var mockBreedsBusinessLogic = new Mock<IBreedsBusinessLogic>();
             mockBreedsBusinessLogic
@@ -242,21 +243,26 @@ namespace Lupi.Web.Api.Tests
                 .Returns(It.IsAny<bool>());
 
             var controller = new BreedsController(mockBreedsBusinessLogic.Object);
-            // Configuramos la Request (dado que estamos haciendo HTTPResponseMessage)
+            // Configuramos la Request (dado que estamos utilziando HttpResponseMessage)
             // Y usando el objeto Request adentro.
+            ConfigureHttpRequest(controller);
+
+            //Act
+            HttpResponseMessage obtainedResult = controller.Delete(fakeGuid);
+
+            //Assert
+            mockBreedsBusinessLogic.VerifyAll();
+            Assert.IsNotNull(obtainedResult);
+        }
+
+        private void ConfigureHttpRequest(BreedsController controller)
+        {
             controller.Request = new HttpRequestMessage();
             controller.Configuration = new HttpConfiguration();
             controller.Configuration.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional });
-
-            //Act
-            HttpResponseMessage obtainedResult = controller.Delete(new Guid());
-
-            //Assert
-            mockBreedsBusinessLogic.VerifyAll();
-            Assert.IsNotNull(obtainedResult);
         }
 
         private Breed GetAFakeBreed()

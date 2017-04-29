@@ -48,10 +48,6 @@ namespace Lupi.BusinessLogic
 
         public bool Delete(Guid id)
         {
-            if (id == null)
-            {
-                throw new ArgumentNullException(nameof(id));
-            }
             return breedsRepository.DeleteById(id);
         }
 
