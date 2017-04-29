@@ -36,6 +36,8 @@ Se deberán agregar también las referencias al proyecto de nuestras Entities, a
 
 Una vez que estos pasos estén prontos, podemos comenzar a realizar nuestro primer test. Creamos entonces la clase BreedsControllerTests, y en ella escribimos el primer `TestMethod`. 
 
+## Probando los Get
+
 ```C#
 
 [TestClass]
@@ -221,4 +223,50 @@ public void GetAllBreedsErrorNotFoundTest()
 Lo que hicimos fue indicar que el retorno esperado será ```null```. En consecuencia, nuestro controller al llamar a este mock, recibirá una lista de razas ```null```. Esto har que nuestro ```Get()``` sobre el Controller retorne una BadRequest.
 
 Finalmente entonces, verificamos que las expectativas se hayan cumplido (con el ```VerifyAll()```), y luego que el resultado obtenido sea un ```NotFoundResult```
+
+## Probando los POST
+
+Lo que haremos ahora será ver como probar nuestros endpoints que creen recursos, particularmente razas.
+
+
+Para ello definimos una nueva función, ```CreateNewBreedTest```.
+
+La diferencia respecto a los tests anteriores es que:
+
+1) Usamos una función ```GetAFakeBreed()``` que nos devuelve una raza esperada. Esta ser la raza que agregaremos sobre nuestro mock de la lógica de negocio (```BreedsBusinessLogic```).
+
+2) Nuestro retorno esperado será la ID de la razxa que agregamos.
+
+3) Nuestro resultado esperado será una respuesta HTTP del tipo CreatedAtRoute (por eso casteamos a ```CreatedAtRouteNegotiatedContentResult```)
+
+4) Dentro de los asserts que hacemos, no solo verificamos que el objeto retornado sea el correcto, si no que se devuelva la ID, (nuestro método POST del Controller devuelve la id del objeto recién agregado). También verificamos que el template de rutas que estemos usando sea DefaultApi.
+
+
+```c#
+[TestMethod]
+public void CreateNewBreedTest()
+{
+    //Arrange
+    var fakeBreed = GetAFakeBreed();
+
+    var mockBreedsBusinessLogic = new Mock<IBreedsBusinessLogic>();
+    mockBreedsBusinessLogic
+        .Setup(bl => bl.Add(fakeBreed))
+        .Returns(fakeBreed.Id);
+
+    var controller = new BreedsController(mockBreedsBusinessLogic.Object);
+
+    //Act
+    IHttpActionResult obtainedResult = controller.Post(fakeBreed);
+    var createdResult = obtainedResult as CreatedAtRouteNegotiatedContentResult<Breed>;
+
+    //Assert
+    mockBreedsBusinessLogic.VerifyAll();
+    Assert.IsNotNull(createdResult);
+    Assert.AreEqual("DefaultApi", createdResult.RouteName);
+    Assert.AreEqual(fakeBreed.Id, createdResult.RouteValues["id"]);
+    Assert.AreEqual(fakeBreed, createdResult.Content);
+}
+```
+
 
