@@ -271,8 +271,6 @@ public void CreateNewBreedTest()
 }
 ```
 
-### Mockeando excepciones:
-
 Ahora probaremos aquellos casos en los que queremos crear un nuevo recurso que es null. Nuestro método del controller espera recibir una excepción del otro lado cuando esto sucede.
 ```C#
 [TestMethod]
@@ -355,4 +353,3 @@ Mockeando los headers:
 Aquí vimos un montón de formas de usar mocks y de funciones que tiene el framework, sin embargo hay muchísimas más. Para leer sobre las mismas, ver la documentación.
 
 <https://github.com/Moq/moq4/wiki/Quickstart>
-
