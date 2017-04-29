@@ -103,7 +103,10 @@ public IHttpActionResult Get()
 }
 ```
 
-La línea que queremos mockear es la de ```C# IEnumerable<Breed> breeds = breedsBusinessLogic.GetAllBreeds();``` 
+La línea que queremos mockear es la de 
+```C#
+IEnumerable<Breed> breeds = breedsBusinessLogic.GetAllBreeds();
+``` 
 
 Entonces:
 
