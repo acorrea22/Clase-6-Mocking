@@ -79,7 +79,7 @@ namespace Lupi.Web.Api.Controllers
             }
         }
 
-        // DELETE: api/Breeds/5
+        //  DELETE: api/Breeds/5
         public HttpResponseMessage Delete(Guid id)
         {
             try
