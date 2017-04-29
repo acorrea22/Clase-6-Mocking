@@ -224,10 +224,9 @@ Lo que hicimos fue indicar que el retorno esperado será ```null```. En consecue
 
 Finalmente entonces, verificamos que las expectativas se hayan cumplido (con el ```VerifyAll()```), y luego que el resultado obtenido sea un ```NotFoundResult```
 
-## Probando los POST
+## Probando los POST/PUT
 
 Lo que haremos ahora será ver como probar nuestros endpoints que creen recursos, particularmente razas.
-
 
 Para ello definimos una nueva función, ```CreateNewBreedTest```.
 
@@ -235,7 +234,7 @@ La diferencia respecto a los tests anteriores es que:
 
 1) Usamos una función ```GetAFakeBreed()``` que nos devuelve una raza esperada. Esta ser la raza que agregaremos sobre nuestro mock de la lógica de negocio (```BreedsBusinessLogic```).
 
-2) Nuestro retorno esperado será la ID de la razxa que agregamos.
+2) Nuestro retorno esperado será la ID de la raza que agregamos.
 
 3) Nuestro resultado esperado será una respuesta HTTP del tipo CreatedAtRoute (por eso casteamos a ```CreatedAtRouteNegotiatedContentResult```)
 
@@ -269,4 +268,78 @@ public void CreateNewBreedTest()
 }
 ```
 
+### Mockeando excepciones:
+
+Ahora probaremos aquellos casos en los que queremos crear un nuevo recurso que es null. Nuestro método del controller espera recibir una excepción del otro lado cuando esto sucede.
+```C#
+[TestMethod]
+public void CreateNullBreedErrorTest()
+{
+    //Arrange
+    Breed fakeBreed = null;
+
+    var mockBreedsBusinessLogic = new Mock<IBreedsBusinessLogic>();
+    mockBreedsBusinessLogic
+        .Setup(bl => bl.Add(fakeBreed))
+        .Throws(new ArgumentNullException());
+
+    var controller = new BreedsController(mockBreedsBusinessLogic.Object);
+
+    //Act
+    IHttpActionResult obtainedResult = controller.Post(fakeBreed);
+
+    //Assert
+    mockBreedsBusinessLogic.VerifyAll();
+    Assert.IsInstanceOfType(obtainedResult, typeof(BadRequestErrorMessageResult));
+}
+```
+## Probando DELETE (con HttpResponseMessage)
+
+Probar métodos de un controller que devuelvan HttpResponseMessage es un poco más trabajoso, ya que hay que realizar ciertas configuraciones adicionales sobre el controller (por ejemplo: setearle la Request entrante -que al tratarse de una prueba creada por nosotros debemos crearla-).
+
+
+```c#
+[TestMethod]
+public void DeleteBreedOkTest()
+{
+    //Arrange
+
+    Guid fakeGuid = Guid.NewGuid();
+
+    var mockBreedsBusinessLogic = new Mock<IBreedsBusinessLogic>();
+    mockBreedsBusinessLogic
+        .Setup(bl => bl.Delete(It.IsAny<Guid>()))
+        .Returns(It.IsAny<bool>());
+
+    var controller = new BreedsController(mockBreedsBusinessLogic.Object);
+    // Configuramos la Request (dado que estamos utilziando HttpResponseMessage)
+    // Y usando el objeto Request adentro.
+    ConfigureHttpRequest(controller);
+
+    //Act
+    HttpResponseMessage obtainedResult = controller.Delete(fakeGuid);
+
+    //Assert
+    mockBreedsBusinessLogic.VerifyAll();
+    Assert.IsNotNull(obtainedResult);
+}
+
+private void ConfigureHttpRequest(BreedsController controller)
+{
+    controller.Request = new HttpRequestMessage();
+    controller.Configuration = new HttpConfiguration();
+    controller.Configuration.Routes.MapHttpRoute(
+        name: "DefaultApi",
+        routeTemplate: "api/{controller}/{id}",
+        defaults: new { id = RouteParameter.Optional });
+}
+```
+
+Es interesante ver cómo usamos ```It.IsAny<T>()``` lo cual le indica al mock que está recibiendo un parámetro que sea cualquier cosa, pero del tipo T.
+
+## Documentacion de Moq
+
+Aquí vimos un montón de formas de usar mocks y de funciones que tiene el framework, sin embargo hay muchísimas más. Para leer sobre las mismas, ver la documentación.
+
+<https://github.com/Moq/moq4/wiki/Quickstart>
 
