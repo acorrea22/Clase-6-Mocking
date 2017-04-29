@@ -86,19 +86,12 @@ Esto va en función del método de prueba. Las expectativas se corresponden al c
 ```C#
 public IHttpActionResult Get()
 {
-    try
+    IEnumerable<Breed> breeds = breedsBusinessLogic.GetAllBreeds();
+    if (breeds == null)
     {
-        IEnumerable<Breed> breeds = breedsBusinessLogic.GetAllBreeds();
-        if (breeds == null)
-        {
-            return NotFound();
-        }
-        return Ok(breeds);
+        return NotFound();
     }
-    catch (ArgumentNullException ex)
-    {
-        return BadRequest(ex.Message);
-    }
+    return Ok(breeds);
 }
 ```
 
