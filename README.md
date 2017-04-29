@@ -77,9 +77,9 @@ public void GetAllBreedsOkTest()
 
 ```
 
-Sin embargo, nos falta definir el comportamiento que debe tener el mock del unitOfWork. Esto es lo que llamamos **expectativas** y lo que vamos asegurarnos que se cumpla al final de la prueba. Recordemos, los mocks simulan el comportamiento de nuestros objetos, siendo ese comportamiento lo que vamos a especificar a partir de expectativas. Para ello, usamos el método **Setup**.
+Sin embargo, nos falta definir el comportamiento que debe tener el mock del nuestro IBreedsBusinessLogic. Esto es lo que llamamos **expectativas** y lo que vamos asegurarnos que se cumpla al final de la prueba. Recordemos, los mocks simulan el comportamiento de nuestros objetos, siendo ese comportamiento lo que vamos a especificar a partir de expectativas. Para ello, usamos el método **Setup**.
 
-#### ¿Cómo saber qué expectativas asignar?
+### ¿Cómo saber qué expectativas asignar?
 
 Esto va en función del método de prueba. Las expectativas se corresponden al caso de uso particular que estamos probando dentro de nuestro método de prueaba. Si esperamos probar el Get() de nuestro BreedsController, y queremos mockear la clase BreedsBusinessLogic, entonces las expectativas se corresponden a las llamadas que hace BreedsController sobre BreedsBusinessLogic. Veamos el método a probar:
 
