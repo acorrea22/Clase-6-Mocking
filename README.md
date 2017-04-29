@@ -81,7 +81,7 @@ Sin embargo, nos falta definir el comportamiento que debe tener el mock del nues
 
 ### ¿Cómo saber qué expectativas asignar?
 
-Esto va en función del método de prueba. Las expectativas se corresponden al caso de uso particular que estamos probando dentro de nuestro método de prueaba. Si esperamos probar el Get() de nuestro BreedsController, y queremos mockear la clase BreedsBusinessLogic, entonces las expectativas se corresponden a las llamadas que hace BreedsController sobre BreedsBusinessLogic. Veamos el método a probar:
+Esto va en función del método de prueba. Las expectativas se corresponden al caso de uso particular que estamos probando dentro de nuestro método de prueba. Si esperamos probar el Get() de nuestro BreedsController, y queremos mockear la clase BreedsBusinessLogic, entonces las expectativas se corresponden a las llamadas que hace BreedsController sobre BreedsBusinessLogic. Veamos el método a probar:
 
 
 ```C#
