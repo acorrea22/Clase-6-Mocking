@@ -10,13 +10,23 @@ Antes de hacer énfasis en tal diferencia, es importante aclarar que nos referir
 
 ## ¿Por qué los queremos usar?
 
-Porque queremos probar objetos y la forma en que estos interactúan con otros objetos. Para ello crearemos instancias de Mocks, es decir, objetos que simulen el comportamiento externo (es decir, la interfaz), de un cierto objeto. Son objetos tontos, que no dependen de nadie, siendo útiles para aislar una cierta parte de la aplicación que queramos probar. En este caso, utilizaremos el proyecto de **BusinessLogic (o lógica de negocio)** , el cual contiene la lógica fundamental de la Web Api.
+Porque queremos probar objetos y la forma en que estos interactúan con otros objetos. Para ello crearemos instancias de Mocks, es decir, objetos que simulen el comportamiento externo (es decir, la interfaz), de un cierto objeto. Son objetos tontos, que no dependen de nadie, siendo útiles para aislar una cierta parte de la aplicación que queramos probar. 
+
+Hay ciertos casos en los que incluso los mocks son realmente la forma más adecuada de llevar a cabo pruebas unitarias. Y afortunadamente, la inyección de dependencias que ya hemos visto nos ayuda a usar mocks de una forma muy transparente. En lugar de crear los objetos dependientes en lugar de nuestros constructores, los estaremos inyectando. Y como dichos objetos de los cuales nuestros objetos dependen tienen una interfaz definida, podremos crear objetos mocks que cumplan con dicha interfaz y se inyecten.
+
+![alt text](http://tutorials.jenkov.com/images/java-unit-testing/testing-with-di-containers.png)
+
+En consecuencia, generamos un **bajo acoplamiento** entre una clase y sus dependencias, lo cual nos facilita utilizar un framework de mocking. Especialmente para aquellos objetos que dependen de un recurso externo (una red, un archivo o una base de datos).
+
+Particularmente estaremos mostrando cómo hacer pruebas unitarias sobre los controllers de nuestra Web Api, realizando mocks sobre las definiciones de nuestra lógica de negocio, por ejemplo: IBreedsBusinessLogic.
 
 ## Empezando con Moq
 
-Para comenzar a utilizar Moq, comenzaremos probando nuestro paquete de servicios. Para ello, debemos crear un nuevo proyecto de tipo Librería de Clases (Tresana.Web.Services.Tests) e instalarle Moq, utilizando el manejador de paquetes Nuget. Se deberán agregar también las referencias al proyecto de nuestras entidades, al de los servicios, y al de los repositorios.
+Para comenzar a utilizar Moq, comenzaremos probando nuestro paquete de controllers de la web api. Para ello, debemos crear un nuevo proyecto de tipo Librería de Clases (Tresana.Web.Api.Tests) e instalarle Moq, utilizando el manejador de paquetes Nuget. Se deberán agregar también las referencias al proyecto de nuestras Entities, al de los BusinessLogic, y obviamente, al de WebApi.
 
-Una vez que estos pasos estén prontos, podemos comenzar a realizar nuestro primer test. Creamos entonces la clase BreedsBusinessLogicTest, y en ella escribimos el primer `Fact`. 
+IMAGEN
+
+Una vez que estos pasos estén prontos, podemos comenzar a realizar nuestro primer test. Creamos entonces la clase BreedsBusinessLogicTest, y en ella escribimos el primer `TestMethod`. 
 
 ```C#
 
