@@ -22,9 +22,17 @@ Particularmente estaremos mostrando cómo hacer pruebas unitarias sobre los cont
 
 ## Empezando con Moq
 
-Para comenzar a utilizar Moq, comenzaremos probando nuestro paquete de controllers de la web api. Para ello, debemos crear un nuevo proyecto de tipo Librería de Clases (Tresana.Web.Api.Tests) e instalarle Moq, utilizando el manejador de paquetes Nuget. Se deberán agregar también las referencias al proyecto de nuestras Entities, al de los BusinessLogic, y obviamente, al de WebApi.
+Para comenzar a utilizar Moq, comenzaremos probando nuestro paquete de controllers de la web api. Para ello, debemos crear un nuevo proyecto de tipo Librería de Clases (Tresana.Web.Api.Tests) e instalarle Moq, utilizando el manejador de paquetes Nuget.
 
-IMAGEN
+
+![alt text](https://github.com/ORT-DA2/Clase-5/blob/develop/Imagenes/1.png)
+
+
+![alt text](https://github.com/ORT-DA2/Clase-5/blob/develop/Imagenes/2.png)
+
+Se deberán agregar también las referencias al proyecto de nuestras Entities, al de los BusinessLogic, y obviamente, al de WebApi.
+
+![alt text](https://github.com/ORT-DA2/Clase-5/blob/develop/Imagenes/3.png)
 
 Una vez que estos pasos estén prontos, podemos comenzar a realizar nuestro primer test. Creamos entonces la clase BreedsBusinessLogicTest, y en ella escribimos el primer `TestMethod`. 
 
