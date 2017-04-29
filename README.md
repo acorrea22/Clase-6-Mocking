@@ -34,104 +34,157 @@ Se deberán agregar también las referencias al proyecto de nuestras Entities, a
 
 ![alt text](https://github.com/ORT-DA2/Clase-5/blob/develop/Imagenes/3.png)
 
-Una vez que estos pasos estén prontos, podemos comenzar a realizar nuestro primer test. Creamos entonces la clase BreedsBusinessLogicTest, y en ella escribimos el primer `TestMethod`. 
+Una vez que estos pasos estén prontos, podemos comenzar a realizar nuestro primer test. Creamos entonces la clase BreedsControllerTests, y en ella escribimos el primer `TestMethod`. 
 
 ```C#
 
-[Fact]
-public void CreateBreedTest()
+[TestClass]
+public class BreedsControllerTests
 {
-    //Arrange
-    
-    //Act
-    
-    //Assert
-}
+    [TestMethod]
+    public void GetAllBreedsOkTest()
+    {
+        //Arrange
+        
+        //Act
+        
+        //Assert
+    }
 
+}
 ```
 
 Para ello seguiremos la metodología **AAA: Arrange, Act, Assert**.
 En la sección de **Arrange**, construiremos los el objeto mock y se lo pasaremos al sistema a probar. En la sección de **Act**, ejecutaremos el sistema a probar. Por último, en la sección de **Assert**, verificaremos la interacción del SUT con el objeto mock.
 
-Ahora, podemos comenzar a probar. Nuestros servicios interactúan con la clase UnitOfWork, siendo esa la implementación que debemos mockear. Para ello debemos generar un mock de IUnitOfWork y pasarlo por parámetro al servicio.
+Ahora, podemos comenzar a probar. Nuestro **BreedsController** interactúan con la clase **IBreedsBusinessLogic** la cual es inyectada en el controller 🤘🏻😎, siendo esa la interfaz que debemos mockear. Para ello debemos generar un mock de IBreedsBusinessLogic y se lo debemos pasar por parmetro por parámetro al Controller.
 
 ```C#
 
-[Fact]
-public void CreateUserTest()
+[TestMethod]
+public void GetAllBreedsOkTest()
 {
-    //Arrange
-    
-    //Inicializo un mock de IUnitOfWork con el que interactuará el UserService
-    var mockUnitOfWork = new Mock<IUnitOfWork>();
-    
-    //Paso el mockUnitOfWork por parámetro al constructor del servicio.
-    //Para obtener el objeto del tipo que creamos el mock, debemos obtener la property Object del mock,
-    //lo que retorna un objeto de tipo IUnitOfWork
-    IUserService userService = new UserService(mockUnitOfWork.Object);
+    //Arrange: Construimos el mock
+    var mockBreedsBusinessLogic = new Mock<IBreedsBusinessLogic>();
+    var controller = new BreedsController(mockBreedsBusinessLogic.Object);
 
-    //Act
-    
+    //Act: Efectuamos la llamada al controller
+    IHttpActionResult obtainedResult = controller.Get();
+
     //Assert
+
 }
 
 ```
 
-Sin embargo, nos falta definir el comportamiento que debe tener el mock del unitOfWork. Para ello, debemos hacer el Setup
+Sin embargo, nos falta definir el comportamiento que debe tener el mock del unitOfWork. Esto es lo que llamamos **expectativas** y lo que vamos asegurarnos que se cumpla al final de la prueba. Recordemos, los mocks simulan el comportamiento de nuestros objetos, siendo ese comportamiento lo que vamos a especificar a partir de expectativas. Para ello, usamos el método **Setup**.
+
+##### ¿Cómo saber qué expectativas asignar? Esto va en función del método de prueba. Las expectativas se corresponden al caso de uso particular que estamos probando dentro de nuestro método de prueaba. Si esperamos probar el Get() de nuestro BreedsController, y queremos mockear la clase BreedsBusinessLogic, entonces las expectativas se corresponden a las llamadas que hace BreedsController sobre BreedsBusinessLogic. Veamos el método a probar:
+
+
+```C#
+public IHttpActionResult Get()
+{
+    try
+    {
+        IEnumerable<Breed> breeds = breedsBusinessLogic.GetAllBreeds();
+        if (breeds == null)
+        {
+            return NotFound();
+        }
+        return Ok(breeds);
+    }
+    catch (ArgumentNullException ex)
+    {
+        return BadRequest(ex.Message);
+    }
+}
+```
+
+La línea que queremos mockear es la de ```C# IEnumerable<Breed> breeds = breedsBusinessLogic.GetAllBreeds();``` 
+
+Entonces:
+
+1) Primero vamos a decirle que esperamos que sobre nuestro Mock que se llame a la función GetAllBreeds().
+2) Luego vamos a indicarle que esperamos que tal función se retorne una lista de razas que definimos en otro lado.
 
 ```C#
 
-[Fact]
-public void CreateUserTest()
+[TestMethod]
+public void GetAllBreedsOkTest()
 {
-    //Arrange
-    
-    //Inicializo un mock de IUnitOfWork con el que interactuará el UserService
-    var mockUnitOfWork = new Mock<IUnitOfWork>();
-    
-    //Esperamos que se llame al método Insert del userRepository con un Usuario y luego al Save();
-    mockUnitOfWork.Setup(un => un.UserRepository.Insert(It.IsAny<User>()));
-    mockUnitOfWork.Setup(un => un.Save());
-    
-    //Paso el mockUnitOfWork por parámetro al constructor del servicio
-    IUserService userService = new UserService(mockUnitOfWork.Object);
+    //Arrange: Construimos el mock y seteamos las expectativas
+    var expectedBreeds = GetFakeBreeds();
+    var mockBreedsBusinessLogic = new Mock<IBreedsBusinessLogic>();
+    mockBreedsBusinessLogic
+        .Setup(bl => bl.GetAllBreeds())
+        .Returns(expectedBreeds);
 
-    //Act
-    
-    //Efectuamos la llamada al servicio
-    User user = userService.CreateUser(new User() { });
-    
+    //Act: Efectuamos la llamada al controller
+    IHttpActionResult obtainedResult = controller.Get();
+
     //Assert
+
+}
+
+//Función auxiliar
+private IEnumerable<Breed> GetFakeBreeds()
+{
+    return new List<Breed>
+    {
+        new Breed
+        {
+            Id = new Guid("e5020d0b-6fce-4b9f-a492-746c6c8a1bfa"),
+            Name = "Pug",
+            HairType  = "short fur",
+            HairColors = new List<string>
+            {
+                "blonde"
+            }
+        },
+        new Breed
+        {
+            Id = new Guid("6b718186-fa8c-4e14-9af8-2601e153db71"),
+            Name = "Golden Retriever",
+            HairType  = "hairy fur",
+            HairColors = new List<string>
+            {
+                "blonde"
+            }
+        }
+    };
 }
 
 ```
 
 Una vez que ejecutamos el método que queremos probar, también debemos verificar que se hicieron las llamadas pertinentes. Para esto usamos el método VerifyAll del mock.
 
+Además, realizamos asserts (aquí estamos probando estado), para ver que los objetos usados son consistentes de acuerdo al resultado esperado.
+
 ```C#
 
-[Fact]
-public void CreateUserTest()
+[TestMethod]
+public void GetAllBreedsOkTest()
 {
     //Arrange
-    
-    //Inicializo un mock de IUnitOfWork con el que interactuará el UserService
-    var mockUnitOfWork = new Mock<IUnitOfWork>();
-    
-    //Esperamos que se llame al método Insert del userRepository con un Usuario y luego al Save();
-    mockUnitOfWork.Setup(un => un.UserRepository.Insert(It.IsAny<User>()));
-    mockUnitOfWork.Setup(un => un.Save());
-    
-    //Paso el mockUnitOfWork por parámetro al constructor del servicio
-    IUserService userService = new UserService(mockUnitOfWork.Object);
+    var expectedBreeds = GetFakeBreeds();
+
+    var mockBreedsBusinessLogic = new Mock<IBreedsBusinessLogic>();
+    mockBreedsBusinessLogic
+        .Setup(bl => bl.GetAllBreeds())
+        .Returns(expectedBreeds);
+
+    var controller = new BreedsController(mockBreedsBusinessLogic.Object);
 
     //Act
-    
-    //Efectuamos la llamada al servicio
-    userService.CreateUser(new User() { });
-    
+    IHttpActionResult obtainedResult = controller.Get();
+    var contentResult = obtainedResult as OkNegotiatedContentResult<IEnumerable<Breed>>;
+
     //Assert
-    mockUnitOfWork.VerifyAll();
+    mockBreedsBusinessLogic.VerifyAll();
+    Assert.IsNotNull(contentResult);
+    Assert.IsNotNull(contentResult.Content);
+    Assert.AreEqual(expectedBreeds, contentResult.Content);
 }
 
 ```
