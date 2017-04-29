@@ -19,24 +19,17 @@ namespace Lupi.Web.Api.Controllers
         {
             breedsBusinessLogic = breedsLogic;
         }
-        
+
         // GET: api/Breeds
         // Ejemplo usando IHttpActionResult
         public IHttpActionResult Get()
         {
-            try
+            IEnumerable<Breed> breeds = breedsBusinessLogic.GetAllBreeds();
+            if (breeds == null)
             {
-                IEnumerable<Breed> breeds = breedsBusinessLogic.GetAllBreeds();
-                if (breeds == null)
-                {
-                    return NotFound();
-                }
-                return Ok(breeds);
+                return NotFound();
             }
-            catch (ArgumentNullException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return Ok(breeds);
         }
 
         // GET: api/Breeds/5
@@ -77,7 +70,7 @@ namespace Lupi.Web.Api.Controllers
         {
             try
             {
-                bool updateResult = breedsBusinessLogic.Update(id,breed);
+                bool updateResult = breedsBusinessLogic.Update(id, breed);
                 return CreatedAtRoute("DefaultApi", new { updated = updateResult }, breed);
             }
             catch (ArgumentNullException ex)

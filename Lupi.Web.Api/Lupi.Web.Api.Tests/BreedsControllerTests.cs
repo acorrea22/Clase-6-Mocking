@@ -16,33 +16,6 @@ namespace Lupi.Web.Api.Tests
     public class BreedsControllerTests
     {
 
-        private IEnumerable<Breed> GetFakeBreeds()
-        {
-            return new List<Breed>
-            {
-                new Breed
-                {
-                    Id = new Guid("e5020d0b-6fce-4b9f-a492-746c6c8a1bfa"),
-                    Name = "Pug",
-                    HairType  = "short fur",
-                    HairColors = new List<string>
-                    {
-                        "blonde"
-                    }
-                },
-                new Breed
-                {
-                    Id = new Guid("6b718186-fa8c-4e14-9af8-2601e153db71"),
-                    Name = "Golden Retriever",
-                    HairType  = "hairy fur",
-                    HairColors = new List<string>
-                    {
-                        "blonde"
-                    }
-                }
-            };
-        }
-
         [TestMethod]
         public void GetAllBreedsOkTest()
         {
@@ -274,6 +247,33 @@ namespace Lupi.Web.Api.Tests
         private Guid GetARandomFakeGuid()
         {
             return GetAFakeBreed().Id;
+        }
+
+        private IEnumerable<Breed> GetFakeBreeds()
+        {
+            return new List<Breed>
+            {
+                new Breed
+                {
+                    Id = new Guid("e5020d0b-6fce-4b9f-a492-746c6c8a1bfa"),
+                    Name = "Pug",
+                    HairType  = "short fur",
+                    HairColors = new List<string>
+                    {
+                        "blonde"
+                    }
+                },
+                new Breed
+                {
+                    Id = new Guid("6b718186-fa8c-4e14-9af8-2601e153db71"),
+                    Name = "Golden Retriever",
+                    HairType  = "hairy fur",
+                    HairColors = new List<string>
+                    {
+                        "blonde"
+                    }
+                }
+            };
         }
     }
 }
