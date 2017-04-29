@@ -271,6 +271,8 @@ public void CreateNewBreedTest()
 }
 ```
 
+### Mockeando excepciones:
+
 Ahora probaremos aquellos casos en los que queremos crear un nuevo recurso que es null. Nuestro método del controller espera recibir una excepción del otro lado cuando esto sucede.
 ```C#
 [TestMethod]
